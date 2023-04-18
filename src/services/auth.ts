@@ -1,9 +1,9 @@
-import { IReqSignin } from "src/interfaces/auth";
+import { IUser } from "src/interfaces/auth";
 import axios from 'axios';
 
 const authApiUrl = "https://www.pre-onboarding-selection-task.shop/auth"
 
-const signin =  async (info:IReqSignin)=> {
+const signin =  async (info:IUser)=> {
   try{
     const res = await axios.post(`${authApiUrl}/signin`,info);
     return res;
@@ -12,7 +12,7 @@ const signin =  async (info:IReqSignin)=> {
   }
 } 
 
-const signup = async (info:IReqSignin) => {
+const signup = async (info:IUser) => {
   try{
     const res = await axios.post(`${authApiUrl}/signup`,info);
     return res;
