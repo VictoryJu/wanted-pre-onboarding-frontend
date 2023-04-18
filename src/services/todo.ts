@@ -8,7 +8,7 @@ const createTodo = async (todo:ITodo) =>{
     const res = await axios.post(todoApiUrl,todo);
     return res
   }catch(e:any){
-    throw new Error(e.response.message)
+    throw new Error(e.response.data.message)
   }
 }
 
@@ -17,7 +17,7 @@ const getTodos = async () =>{
     const res = await axios.get(todoApiUrl);
     return res
   }catch(e:any){
-    throw new Error(e.response.message)
+    throw new Error(e.response.data.message)
   }
 }
 
