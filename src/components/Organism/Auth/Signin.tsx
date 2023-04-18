@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import useCheckValidate from 'src/hooks/handleCheckValidate';
+import useCheckValidate from 'src/hooks/useCheckValidate';
 import authApi from 'src/services/auth';
 import styled from 'styled-components'
 

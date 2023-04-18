@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import useCheckValidate from 'src/hooks/handleCheckValidate';
+import useCheckValidate from 'src/hooks/useCheckValidate';
 import authApi from 'src/services/auth';
 import styled from 'styled-components';
 
@@ -33,7 +33,7 @@ const Signup = ()=> {
     <InfoWrap>
       <InfoInput onChange={(e)=>setEmail(e.target.value)} data-testid="email-input" placeholder='이메일을 입력하세요.' />
       <InfoInput type='password' onChange={(e)=>setPassword(e.target.value)} data-testid="password-input" placeholder='비밀번호를 입력하세요.' />
-      <LoginBtn isReady={isReady} disabled={!isReady} onClick={()=>onSignup()} data-testid="signin-button">회원가입</LoginBtn>
+      <LoginBtn isReady={isReady} disabled={!isReady} onClick={()=>onSignup()} data-testid="signup-button">회원가입</LoginBtn>
       <RegistLine> 
         <RegistLink onClick={()=>navigate('/signin')}>취소</RegistLink> 
       </RegistLine>
