@@ -1,25 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useCheckValidate from 'src/hooks/handleCheckValidate';
 import authApi from 'src/services/auth';
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-
-const Signin = ()=> {
+const Signup = ()=> {
   const navigate = useNavigate();
 
   const [password,setPassword] = useState<string>("");
   const [email,setEmail] = useState<string>("");
-  const {signin} = authApi;
-
+  const {signup} = authApi
   const { isReady, handleCheckValidate } = useCheckValidate(password, email);
 
-  const onSignin = async ()=>{
+  const onSignup = async ()=>{
     try{
-      const res = await signin({email,password});
-      if(res.status === 200){
-        localStorage.setItem('token',res.data.access_token);
-        navigate('/todo');
+      const res = await signup({email,password});
+      if(res.status===201){
+        navigate('/signin');
       }
     }catch(e:any){
       alert(e);
@@ -32,16 +29,16 @@ const Signin = ()=> {
   }, [handleCheckValidate]);
 
   return (
-    <Container>
-      <InfoWrap>
-        <InfoInput onChange={(e)=>setEmail(e.target.value)} data-testid="email-input" placeholder='이메일을 입력하세요.' />
-        <InfoInput type='password' onChange={(e)=>setPassword(e.target.value)} data-testid="password-input" placeholder='비밀번호를 입력하세요.' />
-        <LoginBtn isReady={isReady} disabled={!isReady} onClick={()=>onSignin()} data-testid="signin-button">로그인</LoginBtn>
-        <RegistLine> 
-          <RegistLink onClick={()=>navigate('/signup')}>회원가입</RegistLink> 
-        </RegistLine>
-      </InfoWrap>
-    </Container>
+  <Container>
+    <InfoWrap>
+      <InfoInput onChange={(e)=>setEmail(e.target.value)} data-testid="email-input" placeholder='이메일을 입력하세요.' />
+      <InfoInput type='password' onChange={(e)=>setPassword(e.target.value)} data-testid="password-input" placeholder='비밀번호를 입력하세요.' />
+      <LoginBtn isReady={isReady} disabled={!isReady} onClick={()=>onSignup()} data-testid="signin-button">회원가입</LoginBtn>
+      <RegistLine> 
+        <RegistLink onClick={()=>navigate('/signin')}>취소</RegistLink> 
+      </RegistLine>
+    </InfoWrap>
+  </Container>
   )
 }
 
@@ -93,4 +90,4 @@ const InfoWrap = styled.div`
   width:400px;
 `
 
-export default Signin
+export default Signup

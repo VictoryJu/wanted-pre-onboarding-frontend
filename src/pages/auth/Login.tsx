@@ -1,9 +1,8 @@
-import React from 'react'
-import Signin from 'src/components/Organism/Auth/Signin'
+import SigninTemplate from 'src/components/Template/auth/Signin'
 
 const Login = ()=> {
   return (
-    <Signin/>
+    <SigninTemplate/>
   )
 }
 
