@@ -92,6 +92,11 @@ const TodoList = ()=> {
     }
   }
 
+  const handleTodoCancle = ()=>{
+    setIsUpdate(0);
+    setEditTodo("");
+  }
+
   return (
     <Container>
         <Title>투두 리스트</Title>
@@ -112,7 +117,7 @@ const TodoList = ()=> {
                     {/* edtiTodo 독립되게 교체해야함 */}
                     <TodoUpdateInput data-testid="modify-input"  value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} />
                     <TodoBtn data-testid="submit-button" onClick={()=>handleTodoUpdate(todo.id)}>제출</TodoBtn>
-                    <TodoBtn data-testid="cancel-button" onClick={()=>setIsUpdate(0)}>취소</TodoBtn>
+                    <TodoBtn data-testid="cancel-button" onClick={handleTodoCancle}>취소</TodoBtn>
                     </>
                     :
                     <>

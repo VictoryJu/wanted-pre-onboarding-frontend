@@ -4,8 +4,6 @@ import axiosInstance from "src/utils/fetch";
 
 const todoApiUrl = "https://www.pre-onboarding-selection-task.shop/todos"
 
-
-
 const createTodo = async (todo:IReqTodo) =>{
   try{
     const res = await axiosInstance.post(todoApiUrl,todo);
@@ -35,7 +33,7 @@ const updateTodo = async (updateTodo:IPutTodo)=>{
 
 const deleteTodo = async (todoId:number) =>{
   try{
-    const res = await axios.delete(`${todoApiUrl}/${todoId}`);
+    const res = await axiosInstance.delete(`${todoApiUrl}/${todoId}`);
     return res
   }catch(e:any){
     throw new Error(e.response.data.message)
