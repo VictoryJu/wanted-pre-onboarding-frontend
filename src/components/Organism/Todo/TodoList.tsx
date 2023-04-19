@@ -10,14 +10,12 @@ const TodoList = ()=> {
   const [todo,setTodo] = useState<string>("");
   const [isUpdate,setIsUpdate] = useState<number>();
   const [editTodo,setEditTodo] = useState("");
-  const [complate,setComplate] = useState(false);
 
   const fetchTodos = async() =>{
     try{
       const res = await getTodos();
       setTodos(res.data);
     }catch(e:any){
-      alert(e);
       throw new Error(e);
     }
   }
