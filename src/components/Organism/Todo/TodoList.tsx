@@ -8,6 +8,8 @@ const TodoList = ()=> {
   const [todos,setTodos] = useState<Array<ITodo>>();
   const {getTodos,createTodo,updateTodo} = todoApi
   const [todo,setTodo] = useState<string>("");
+  const [isUpdate,setIsUpdate] = useState<number>();
+  const [editTodo,setEditTodo] = useState("");
 
   const fetchTodos = async() =>{
     try{
@@ -29,7 +31,7 @@ const TodoList = ()=> {
       if (todo.id === id) {
         return {
           ...todo,
-          isCompleted: !todo.isCompleted
+          isCompleted: !todo.isCompleted,
         };
       }
       return todo;
@@ -53,6 +55,22 @@ const TodoList = ()=> {
     }
   }
 
+  const handleTodoUpdate = async(todoId:number)=>{
+    try{
+        const findUpdateTodo = todos?.filter(todo=>todo.id === todoId)[0];
+        if(findUpdateTodo){
+            const res = await updateTodo(findUpdateTodo);
+            if(res.status===200){
+                setIsUpdate(0);
+                const updateTodos = await getTodos();
+                setTodos(updateTodos.data);
+            }
+        }
+    }catch(e){
+        console.log(e)
+    }
+  }
+
   return (
     <Container>
         <Title>투두 리스트</Title>
@@ -67,10 +85,21 @@ const TodoList = ()=> {
               <TodoWrap key={todo.id}>
                 <label>
                   <TodoItemInput onChange={()=>handleToggleComplete(todo.id)} checked={todo.isCompleted} type="checkbox" />
-                  <Content>{todo.todo}</Content>
-
-                  <TodoBtn>수정</TodoBtn>
-                  <TodoBtn>삭제</TodoBtn>
+                  {
+                    isUpdate === todo.id ? 
+                    <>
+                    {/* edtiTodo 독립되게 교체해야함 */}
+                    <TodoUpdateInput value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} />
+                    <TodoBtn onClick={()=>handleTodoUpdate(todo.id)}>제출</TodoBtn>
+                    <TodoBtn onClick={()=>setIsUpdate(0)}>취소</TodoBtn>
+                    </>
+                    :
+                    <>
+                    <Content>{todo.todo}</Content>
+                    <TodoBtn onClick={()=>setIsUpdate(todo.id)}>수정</TodoBtn>
+                    <TodoBtn>삭제</TodoBtn>
+                    </>
+                  }
                 </label>
               </TodoWrap>
             )
@@ -114,6 +143,16 @@ const Content = styled.div`
 const TodoBtn = styled.button`
   margin-left:15px;
   padding: 10px 10px;
+  cursor: pointer;
+`
+
+const TodoUpdateInput = styled.input`
+  width:300px;
+  max-width:300px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:left;
   cursor: pointer;
 `
 
