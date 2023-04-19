@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ITodo } from 'src/interfaces/todo'
 import todoApi from 'src/services/todo'
 import styled from 'styled-components'
 
 const TodoList = ()=> {
-
   const [todos,setTodos] = useState<Array<ITodo>>();
-  const {getTodos} = todoApi
+  const {getTodos,createTodo,updateTodo} = todoApi
+  const [todo,setTodo] = useState<string>("");
 
-  // const fetchTodos = async() =>{
-  //   try{
-  //     const res = await getTodos();
-  //     setTodos(res.data);
-  //   }catch(e:any){
-  //     alert(e);
-  //     throw new Error(e);
-  //   }
-  // }
+  const fetchTodos = async() =>{
+    try{
+      const res = await getTodos();
+      setTodos(res.data);
+    }catch(e:any){
+      alert(e);
+      throw new Error(e);
+    }
+  }
 
-  // useEffect(()=>{
-  //   fetchTodos()
-  // },[])
+  useEffect(()=>{
+    fetchTodos()
+  },[])
 
-  const [datas,setDatas] = useState([{id:1,todo:"Dsa",isCompleted:false},{id:2,todo:"Dsaqw",isCompleted:true}])
 
   const handleToggleComplete = (id: number) => {
-    
-    setDatas(prevTodos =>prevTodos && prevTodos.map(todo => {
+    setTodos(prevTodos =>prevTodos && prevTodos.map(todo => {
       if (todo.id === id) {
         return {
           ...todo,
@@ -35,33 +34,35 @@ const TodoList = ()=> {
       }
       return todo;
     }));
-    
+  }
+
+  const handleTodoCreate = async ()=>{
+    try{
+        if(todo){
+            const res = await createTodo({todo});
+            if(res.status === 201){
+                const updateTodos = await getTodos();
+                setTodos(updateTodos.data);
+                setTodo('');
+                alert('투두 리스트가 추가되었습니다.')
+            }
+        }
+    }
+    catch(e){
+        console.log(e);
+    }
   }
 
   return (
     <Container>
         <Title>투두 리스트</Title>
         <InputWrap>
-          <Todoinput/>
-          <TodoBtn>추가</TodoBtn>
+          <Todoinput value={todo} onChange={(e)=>setTodo(e.target.value)} />
+          <TodoBtn onClick={handleTodoCreate}>추가</TodoBtn>
         </InputWrap>
 
-        {/* {
+        {
           todos && todos.map(todo=>{
-            return(
-              <TotoWrap key={todo.id}>
-                <label>
-                  <input checked={todo.isCompleted} type="checkbox" />
-                  <span>{todo.todo}</span>
-                  <TodoBtn>수정</TodoBtn>
-                  <TodoBtn>삭제</TodoBtn>
-                </label>
-              </TotoWrap>
-            )
-          })
-        } */}
-                {
-          datas && datas.map(todo=>{
             return(
               <TodoWrap key={todo.id}>
                 <label>

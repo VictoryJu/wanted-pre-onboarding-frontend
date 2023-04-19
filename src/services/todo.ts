@@ -1,11 +1,13 @@
 import axios from "axios";
-import { ITodo } from "src/interfaces/todo";
+import { IPutTodo, IReqTodo } from "src/interfaces/todo";
 
 const todoApiUrl = "https://www.pre-onboarding-selection-task.shop/todos"
-
-const createTodo = async (todo:ITodo) =>{
+const token = localStorage.getItem('token');
+const createTodo = async (todo:IReqTodo) =>{
   try{
-    const res = await axios.post(todoApiUrl,todo);
+    const res = await axios.post(todoApiUrl,todo,{
+        headers:{"Authorization":`Bearer ${token}`}
+    });
     return res
   }catch(e:any){
     throw new Error(e.response.data.message)
@@ -14,18 +16,32 @@ const createTodo = async (todo:ITodo) =>{
 
 const getTodos = async () =>{
   try{
-    const res = await axios.get(todoApiUrl);
+    const res = await axios.get(todoApiUrl,{
+        headers:{"Authorization":`Bearer ${token}`}
+    });
     return res
   }catch(e:any){
     throw new Error(e.response.data.message)
   }
 }
 
+const updateTodo = async (updateTodo:IPutTodo)=>{
+    try{
+        const res = await axios.put(`${todoApiUrl}/${updateTodo.todoId,updateTodo,{
+            headers:{"Authorization":`Bearer ${token}`}
+        }}`);
+        return res
+    }catch(e:any){
+        throw new Error(e.response.data.message)
+    }
+}
+
 
 
 const todoApi = {
   createTodo,
-  getTodos
+  getTodos,
+  updateTodo
 }
 
 export default todoApi
