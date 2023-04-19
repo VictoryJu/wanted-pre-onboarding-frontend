@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 const TodoList = ()=> {
   const [todos,setTodos] = useState<Array<ITodo>>();
-  const {getTodos,createTodo,updateTodo} = todoApi
+  const {getTodos,createTodo,updateTodo,deleteTodo} = todoApi
   const [todo,setTodo] = useState<string>("");
   const [isUpdate,setIsUpdate] = useState<number>();
   const [editTodo,setEditTodo] = useState("");
@@ -80,9 +80,14 @@ const TodoList = ()=> {
     }
   }
 
-  const handleTodoDelete = ()=>{
+  const handleTodoDelete = async (todoId:number)=>{
     try{
-
+      const res = await deleteTodo(todoId);
+      if(res.status===204){
+        const updateTodos = await getTodos();
+        setTodos(updateTodos.data);
+        alert("투두 리스트가 삭제되었습니다.");
+      }
     }catch(e:any){
       alert(e);
       throw new Error(e);
@@ -114,8 +119,8 @@ const TodoList = ()=> {
                     :
                     <>
                     <Content>{todo.todo}</Content>
-                    <TodoBtn onClick={()=>{setIsUpdate(todo.id);setEditTodo(todo.todo)}}>수정</TodoBtn>
-                    <TodoBtn>삭제</TodoBtn>
+                    <TodoBtn data-testid="modify-button" onClick={()=>{setIsUpdate(todo.id);setEditTodo(todo.todo)}}>수정</TodoBtn>
+                    <TodoBtn data-testid="delete-button" onClick={()=>handleTodoDelete(todo.id)}>삭제</TodoBtn>
                     </>
                   }
                 </label>

@@ -38,7 +38,7 @@ const updateTodo = async (updateTodo:IPutTodo)=>{
 
 const deleteTodo = async (todoId:number) =>{
   try{
-    const res = await axios.delete(`${todoApi}/${todoId}`,{
+    const res = await axios.delete(`${todoApiUrl}/${todoId}`,{
       headers:{"Authorization":`Bearer ${token}`}}
       );
     return res
