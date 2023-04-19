@@ -1,6 +1,6 @@
 프로젝트 실행방법
 
-1. git clone
+1. git clone https://github.com/VictoryJu/wanted-pre-onboarding-frontend.git
 2. npm install
 3. npm start
 
