@@ -27,13 +27,24 @@ const getTodos = async () =>{
 
 const updateTodo = async (updateTodo:IPutTodo)=>{
     try{
-        const res = await axios.put(`${todoApiUrl}/${updateTodo.todoId,updateTodo,{
-            headers:{"Authorization":`Bearer ${token}`}
-        }}`);
+        const res = await axios.put(`${todoApiUrl}/${updateTodo.id}`,{todo:updateTodo.todo,isCompleted:updateTodo.isCompleted},{
+          headers:{"Authorization":`Bearer ${token}`}}
+          );
         return res
     }catch(e:any){
         throw new Error(e.response.data.message)
     }
+}
+
+const deleteTodo = async (todoId:number) =>{
+  try{
+    const res = await axios.delete(`${todoApi}/${todoId}`,{
+      headers:{"Authorization":`Bearer ${token}`}}
+      );
+    return res
+  }catch(e:any){
+    throw new Error(e.response.data.message)
+  }
 }
 
 
@@ -41,7 +52,8 @@ const updateTodo = async (updateTodo:IPutTodo)=>{
 const todoApi = {
   createTodo,
   getTodos,
-  updateTodo
+  updateTodo,
+  deleteTodo
 }
 
 export default todoApi

@@ -12,5 +12,5 @@ export interface IReqTodo {
 export interface IPutTodo {
     todo:string;
     isCompleted: boolean;
-    todoId?:number;
+    id:number;
 }

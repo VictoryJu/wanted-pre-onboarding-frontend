@@ -10,6 +10,7 @@ const TodoList = ()=> {
   const [todo,setTodo] = useState<string>("");
   const [isUpdate,setIsUpdate] = useState<number>();
   const [editTodo,setEditTodo] = useState("");
+  const [complate,setComplate] = useState(false);
 
   const fetchTodos = async() =>{
     try{
@@ -50,24 +51,41 @@ const TodoList = ()=> {
             }
         }
     }
-    catch(e){
-        console.log(e);
+    catch(e:any){
+        alert(e);
+        throw new Error(e);
     }
   }
 
   const handleTodoUpdate = async(todoId:number)=>{
     try{
-        const findUpdateTodo = todos?.filter(todo=>todo.id === todoId)[0];
+        let findUpdateTodo = todos?.filter(todo=>todo.id === todoId);
+      
         if(findUpdateTodo){
-            const res = await updateTodo(findUpdateTodo);
+          const findUpdateTodoInfo = findUpdateTodo.map(todo=>{
+            todo.todo = editTodo;
+            return todo
+          })[0]
+            const res = await updateTodo(findUpdateTodoInfo);
             if(res.status===200){
                 setIsUpdate(0);
                 const updateTodos = await getTodos();
                 setTodos(updateTodos.data);
+                alert("투두리스트가 수정되었습니다.");
             }
         }
-    }catch(e){
-        console.log(e)
+    }catch(e:any){
+      alert(e);
+      throw new Error(e);
+    }
+  }
+
+  const handleTodoDelete = ()=>{
+    try{
+
+    }catch(e:any){
+      alert(e);
+      throw new Error(e);
     }
   }
 
@@ -75,8 +93,8 @@ const TodoList = ()=> {
     <Container>
         <Title>투두 리스트</Title>
         <InputWrap>
-          <Todoinput value={todo} onChange={(e)=>setTodo(e.target.value)} />
-          <TodoBtn onClick={handleTodoCreate}>추가</TodoBtn>
+          <Todoinput data-testid="new-todo-input" value={todo} onChange={(e)=>setTodo(e.target.value)} />
+          <TodoBtn data-testid="new-todo-add-button" onClick={handleTodoCreate}>추가</TodoBtn>
         </InputWrap>
 
         {
@@ -89,14 +107,14 @@ const TodoList = ()=> {
                     isUpdate === todo.id ? 
                     <>
                     {/* edtiTodo 독립되게 교체해야함 */}
-                    <TodoUpdateInput value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} />
-                    <TodoBtn onClick={()=>handleTodoUpdate(todo.id)}>제출</TodoBtn>
-                    <TodoBtn onClick={()=>setIsUpdate(0)}>취소</TodoBtn>
+                    <TodoUpdateInput data-testid="modify-input"  value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} />
+                    <TodoBtn data-testid="submit-button" onClick={()=>handleTodoUpdate(todo.id)}>제출</TodoBtn>
+                    <TodoBtn data-testid="cancel-button" onClick={()=>setIsUpdate(0)}>취소</TodoBtn>
                     </>
                     :
                     <>
                     <Content>{todo.todo}</Content>
-                    <TodoBtn onClick={()=>setIsUpdate(todo.id)}>수정</TodoBtn>
+                    <TodoBtn onClick={()=>{setIsUpdate(todo.id);setEditTodo(todo.todo)}}>수정</TodoBtn>
                     <TodoBtn>삭제</TodoBtn>
                     </>
                   }
