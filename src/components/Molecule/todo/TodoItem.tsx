@@ -3,9 +3,9 @@ import { ITodo } from 'src/interfaces/todo'
 import {todo as todoApi} from 'src/services/api';
 import styled from 'styled-components';
 
-const TodoItem = ({todo}:{todo:ITodo})=> {
+const TodoItem = ({todo,refetch}:{todo:ITodo,refetch:() => Promise<void>})=> {
   const [isUpdate,setIsUpdate] = useState<boolean>(false);
-  const [todoInfo,setTodoInfo] = useState(todo);
+  const [isComplete,setIsComplete] = useState<boolean>(todo.isCompleted);
   const [editTodo,setEditTodo] = useState(todo.todo);
 
   const handleTodoDelete = async (todoId:number)=>{
@@ -13,20 +13,13 @@ const TodoItem = ({todo}:{todo:ITodo})=> {
       const res = await todoApi.deleteTodo(todoId);
       if(res.status===204){
         alert("투두 리스트가 삭제되었습니다.");
+        refetch();
       }
     }catch(e:any){
       alert(e);
       throw new Error(e);
     }
-  }
-
-  const updateInput = (content:string)=>{
-    setTodoInfo((todo)=>{
-      let updateTodo = {...todo}
-      updateTodo.todo = content
-      return updateTodo
-    });
-  }
+  } 
 
   const handleTodoCancle = ()=>{
     setIsUpdate(false);
@@ -35,10 +28,16 @@ const TodoItem = ({todo}:{todo:ITodo})=> {
 
   const handleTodoUpdate = async()=>{
     try{
-        const res = await todoApi.updateTodo(todoInfo);
+        const updatedTodo = {
+          ...todo,
+          isCompleted: isComplete,
+          todo: editTodo,
+        };
+        const res = await todoApi.updateTodo(updatedTodo);
         if(res.status===200){
             setIsUpdate(false);
             alert("투두리스트가 수정되었습니다.");
+            refetch();
         }
     }catch(e:any){
       alert(e);
@@ -46,32 +45,23 @@ const TodoItem = ({todo}:{todo:ITodo})=> {
     }
   }
 
-  const handleToggleComplete = () => {
-    setTodoInfo((todo)=>{
-      let newTodo = {...todo};
-      newTodo.isCompleted = !newTodo.isCompleted;
-      console.log(newTodo)
-      return newTodo
-    });
-  }
-
   return (
     <>
       <Wrap key={todo.id}>
         <label>
-          <ItemInput onChange={()=>handleToggleComplete()} checked={todoInfo.isCompleted} type="checkbox" />
+          <ItemInput onChange={()=>setIsComplete(prev=>!prev)} checked={isComplete} type="checkbox" />
           {
             isUpdate ?
             <>
-            <UpdateInput data-testid="modify-input"  value={editTodo} onChange={(e)=>updateInput(e.target.value)} />
-            <Btn data-testid="submit-button" onClick={()=>handleTodoUpdate()}>제출</Btn>
+            <UpdateInput data-testid="modify-input"  value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} />
+            <Btn data-testid="submit-button" onClick={()=>{handleTodoUpdate();}}>제출</Btn>
             <Btn data-testid="cancel-button" onClick={handleTodoCancle}>취소</Btn>
             </>
             :
             <>
-            <Content>{todoInfo.todo}</Content>
+            <Content>{todo.todo}</Content>
             <Btn data-testid="modify-button" onClick={()=>{setIsUpdate(true);}}>수정</Btn>
-            <Btn data-testid="delete-button" onClick={()=>handleTodoDelete(todoInfo.id)}>삭제</Btn>
+            <Btn data-testid="delete-button" onClick={()=>handleTodoDelete(todo.id)}>삭제</Btn>
             </>
           }
         </label>

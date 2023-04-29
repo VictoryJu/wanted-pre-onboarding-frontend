@@ -6,7 +6,7 @@ const todoApiUrl = "/todos"
 
 const createTodo = async (todo:string) =>{
   try{
-    const res = await axiosInstance.post(todoApiUrl,todo);
+    const res = await axiosInstance.post(todoApiUrl,{todo:todo});
     return res
   }catch(e:any){
     throw new Error(e.response.data.message)

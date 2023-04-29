@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, { useCallback, useEffect, useState } from 'react'
 import TodoItem from 'src/components/Molecule/todo/TodoItem'
 import { ITodo } from 'src/interfaces/todo'
 import todoApi from 'src/services/todo'
@@ -10,14 +9,14 @@ const TodoList = ()=> {
   const {getTodos,createTodo} = todoApi
   const [todo,setTodo] = useState<string>("");
 
-  const fetchTodos = async() =>{
+  const fetchTodos = useCallback(async ()=>{
     try{
       const res = await getTodos();
       setTodos(res.data);
     }catch(e:any){
       throw new Error(e);
     }
-  }
+  },[setTodos]) 
 
   useEffect(()=>{
     fetchTodos()
@@ -53,7 +52,7 @@ const TodoList = ()=> {
         {
           todos && todos.map(todo=>{
             return(
-              <TodoItem todo={todo} />
+              <TodoItem todo={todo} refetch={fetchTodos}/>
             )
           })
         }
