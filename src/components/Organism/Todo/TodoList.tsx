@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import CMButton from 'src/components/Atoms/CMButton'
 import TodoItem from 'src/components/Molecule/todo/TodoItem'
 import { ITodo } from 'src/interfaces/todo'
 import todoApi from 'src/services/todo'
@@ -46,7 +47,7 @@ const TodoList = ()=> {
         <Title>투두 리스트</Title>
         <InputWrap>
           <Todoinput data-testid="new-todo-input" value={todo} onChange={(e)=>setTodo(e.target.value)} />
-          <Btn data-testid="new-todo-add-button" onClick={handleTodoCreate}>추가</Btn>
+          <CMButton marginLeft='15px' padding='10px 10px' data-testid="new-todo-add-button" onClick={handleTodoCreate}>추가</CMButton>
         </InputWrap>
 
         {
@@ -66,12 +67,6 @@ const Container = styled.div`
   width:1200px;
   margin:0 auto;
   text-align:center;
-`
-
-const Btn = styled.button`
-  margin-left:15px;
-  padding: 10px 10px;
-  cursor: pointer;
 `
 
 const Title = styled.div`

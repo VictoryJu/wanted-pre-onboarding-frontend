@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import CMButton from 'src/components/Atoms/CMButton';
 import { ITodo } from 'src/interfaces/todo'
 import {todo as todoApi} from 'src/services/api';
 import styled from 'styled-components';
@@ -54,14 +55,14 @@ const TodoItem = ({todo,refetch}:{todo:ITodo,refetch:() => Promise<void>})=> {
             isUpdate ?
             <>
             <UpdateInput data-testid="modify-input"  value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} />
-            <Btn data-testid="submit-button" onClick={()=>{handleTodoUpdate();}}>제출</Btn>
-            <Btn data-testid="cancel-button" onClick={handleTodoCancle}>취소</Btn>
+            <CMButton marginLeft='15px' padding='10px 10px' data-testid="submit-button" onClick={()=>{handleTodoUpdate();}}>제출</CMButton>
+            <CMButton marginLeft='15px' padding='10px 10px' data-testid="cancel-button" onClick={handleTodoCancle}>취소</CMButton>
             </>
             :
             <>
             <Content>{todo.todo}</Content>
-            <Btn data-testid="modify-button" onClick={()=>{setIsUpdate(true);}}>수정</Btn>
-            <Btn data-testid="delete-button" onClick={()=>handleTodoDelete(todo.id)}>삭제</Btn>
+            <CMButton marginLeft='15px' padding='10px 10px' data-testid="modify-button" onClick={()=>{setIsUpdate(true);}}>수정</CMButton>
+            <CMButton marginLeft='15px' padding='10px 10px' data-testid="delete-button" onClick={()=>handleTodoDelete(todo.id)}>삭제</CMButton>
             </>
           }
         </label>
@@ -87,12 +88,6 @@ const Wrap = styled.li`
 
 const ItemInput = styled.input`
   width: 30px;
-`
-
-const Btn = styled.button`
-  margin-left:15px;
-  padding: 10px 10px;
-  cursor: pointer;
 `
 
 const UpdateInput = styled.input`
