@@ -11,7 +11,7 @@ type Props = {
 
 const CMButton = ({children,value,marginLeft,padding,onClick = () => {}}:Props)=> {
   return (
-    <Button marginLeft={marginLeft} padding={padding}>
+    <Button marginLeft={marginLeft} padding={padding} onClick={onClick}>
       {children ? children: value}
     </Button>
   )
