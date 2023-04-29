@@ -2,7 +2,7 @@ import { IUser } from "src/interfaces/auth";
 import axios from 'axios';
 import axiosInstance from "src/utils/fetch";
 
-const authApiUrl = "https://www.pre-onboarding-selection-task.shop/auth"
+const authApiUrl = "/auth"
 
 const signin =  async (info:IUser)=> {
   try{

@@ -1,10 +1,10 @@
 import axios from "axios";
-import { IPutTodo, IReqTodo } from "src/interfaces/todo";
+import { ITodo} from "src/interfaces/todo";
 import axiosInstance from "src/utils/fetch";
 
-const todoApiUrl = "https://www.pre-onboarding-selection-task.shop/todos"
+const todoApiUrl = "/todos"
 
-const createTodo = async (todo:IReqTodo) =>{
+const createTodo = async (todo:string) =>{
   try{
     const res = await axiosInstance.post(todoApiUrl,todo);
     return res
@@ -22,9 +22,9 @@ const getTodos = async () =>{
   }
 }
 
-const updateTodo = async (updateTodo:IPutTodo)=>{
+const updateTodo = async (todo:ITodo)=>{
     try{
-        const res = await axiosInstance.put(`${todoApiUrl}/${updateTodo.id}`,{todo:updateTodo.todo,isCompleted:updateTodo.isCompleted});
+        const res = await axiosInstance.put(`${todoApiUrl}/${todo.id}`,{todo:todo.todo,isCompleted:todo.isCompleted});
         return res
     }catch(e:any){
         throw new Error(e.response.data.message)

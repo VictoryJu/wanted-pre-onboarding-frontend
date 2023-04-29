@@ -1,5 +1,5 @@
 import React from 'react'
-import Signup from 'src/components/Organism/Auth/Signup'
+import Signup from 'src/components/Organism/auth/Signup'
 
 const SignupTemplate = ()=> {
   return (

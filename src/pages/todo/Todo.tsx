@@ -4,6 +4,7 @@ import TodoTemplate from 'src/components/Template/todo/Todo'
 
 const Todo = ()=> {
     const isLoggedIn = localStorage.getItem('token');
+    console.log(isLoggedIn)
     const navigate = useNavigate()
     useEffect(()=>{
       if(!isLoggedIn) navigate('/signin')
