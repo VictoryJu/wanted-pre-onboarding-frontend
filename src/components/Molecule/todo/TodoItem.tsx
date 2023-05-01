@@ -1,13 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CMButton from 'src/components/Atoms/CMButton';
 import { ITodo } from 'src/interfaces/todo'
 import {todo as todoApi} from 'src/services/api';
 import styled from 'styled-components';
+import UpdateItem from './UpdateItem';
 
-const TodoItem = ({todo,refetch}:{todo:ITodo,refetch:() => Promise<void>})=> {
+type Props = {
+  todo:ITodo;
+  refetch: () => Promise<void>
+}
+
+const TodoItem = ({todo,refetch}:Props)=> {
   const [isUpdate,setIsUpdate] = useState<boolean>(false);
   const [isComplete,setIsComplete] = useState<boolean>(todo.isCompleted);
-  const [editTodo,setEditTodo] = useState(todo.todo);
+
+  useEffect(()=>{
+    setIsComplete(todo.isCompleted)
+  },[todo])
 
   const handleTodoDelete = async (todoId:number)=>{
     try{
@@ -22,50 +31,20 @@ const TodoItem = ({todo,refetch}:{todo:ITodo,refetch:() => Promise<void>})=> {
     }
   } 
 
-  const handleTodoCancle = ()=>{
-    setIsUpdate(false);
-    setEditTodo(todo.todo);
-  }
-
-  const handleTodoUpdate = async()=>{
-    try{
-        const updatedTodo = {
-          ...todo,
-          isCompleted: isComplete,
-          todo: editTodo,
-        };
-        const res = await todoApi.updateTodo(updatedTodo);
-        if(res.status===200){
-            setIsUpdate(false);
-            alert("투두리스트가 수정되었습니다.");
-            refetch();
-        }
-    }catch(e:any){
-      alert(e);
-      throw new Error(e);
-    }
-  }
-
   return (
     <>
       <Wrap key={todo.id}>
-        <label>
+        {
+          isUpdate ?
+          <UpdateItem originTodo={todo} setIsUpdate={setIsUpdate} refetch={refetch} />
+          :
+          <>
           <ItemInput onChange={()=>setIsComplete(prev=>!prev)} checked={isComplete} type="checkbox" />
-          {
-            isUpdate ?
-            <>
-            <UpdateInput data-testid="modify-input"  value={editTodo} onChange={(e)=>setEditTodo(e.target.value)} />
-            <CMButton marginLeft='15px' padding='10px 10px' data-testid="submit-button" onClick={()=>{handleTodoUpdate();}}>제출</CMButton>
-            <CMButton marginLeft='15px' padding='10px 10px' data-testid="cancel-button" onClick={handleTodoCancle}>취소</CMButton>
-            </>
-            :
-            <>
-            <Content>{todo.todo}</Content>
-            <CMButton marginLeft='15px' padding='10px 10px' data-testid="modify-button" onClick={()=>{setIsUpdate(true);}}>수정</CMButton>
-            <CMButton marginLeft='15px' padding='10px 10px' data-testid="delete-button" onClick={()=>handleTodoDelete(todo.id)}>삭제</CMButton>
-            </>
-          }
-        </label>
+          <Content>{todo.todo}</Content>
+          <CMButton marginLeft='15px' padding='10px 10px' data-testid="modify-button" onClick={()=>{setIsUpdate(true);}}>수정</CMButton>
+          <CMButton marginLeft='15px' padding='10px 10px' data-testid="delete-button" onClick={()=>handleTodoDelete(todo.id)}>삭제</CMButton>
+          </>
+        }
       </Wrap>
     </>
   )
@@ -90,14 +69,5 @@ const ItemInput = styled.input`
   width: 30px;
 `
 
-const UpdateInput = styled.input`
-  width:300px;
-  max-width:300px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  text-align:left;
-  cursor: pointer;
-`
 
 export default TodoItem
